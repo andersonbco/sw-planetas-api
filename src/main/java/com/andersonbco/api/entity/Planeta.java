@@ -1,5 +1,5 @@
 
-package com.andersonbco.api.model;
+package com.andersonbco.api.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -3,13 +3,8 @@ package com.andersonbco.api.resource;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.andersonbco.api.model.Planeta;
+import com.andersonbco.api.dto.PlanetaDTO;
+import com.andersonbco.api.entity.Planeta;
 import com.andersonbco.api.service.PlanetaService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
@@ -36,9 +35,9 @@ public class PlanetaResource {
       httpMethod = "GET",
       response = Planeta.class)
   @GetMapping("/{id}")
-  public ResponseEntity<Planeta> buscaPlanetaPorId(@PathVariable String id) {
-    Optional<Planeta> planeta = planetaService.buscaPlaneta(id);
-    return ResponseEntity.ok(planeta.get());
+  public ResponseEntity<PlanetaDTO> buscaPlanetaPorId(@PathVariable String id) {
+    PlanetaDTO planetaDTO = planetaService.buscaPlaneta(id);
+    return ResponseEntity.ok(planetaDTO);
   }
 
   @ApiOperation(
@@ -47,8 +46,8 @@ public class PlanetaResource {
       response = Planeta.class)
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Planeta> criaPlaneta(@RequestBody Planeta planeta) {
-    Planeta novoPlaneta = planetaService.criaPlaneta(planeta);
+  public ResponseEntity<PlanetaDTO> criaPlaneta(@RequestBody Planeta planeta) {
+    PlanetaDTO novoPlaneta = planetaService.criaPlaneta(planeta);
 
     URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(novoPlaneta.getId()).toUri();
@@ -63,7 +62,7 @@ public class PlanetaResource {
       responseContainer = "List")
   @GetMapping(
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<Planeta>> listaPlanetas() {
+  public ResponseEntity<List<PlanetaDTO>> listaPlanetas() {
     return ResponseEntity.ok(planetaService.listaPlanetas());
   }
 }
