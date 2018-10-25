@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,12 +31,20 @@ public class PlanetaResource {
   @Autowired
   PlanetaService planetaService;
 
+  @ApiOperation(
+      value = "Busca um planeta através do ID",
+      httpMethod = "GET",
+      response = Planeta.class)
   @GetMapping("/{id}")
   public ResponseEntity<Planeta> buscaPlanetaPorId(@PathVariable String id) {
     Optional<Planeta> planeta = planetaService.buscaPlaneta(id);
     return ResponseEntity.ok(planeta.get());
   }
 
+  @ApiOperation(
+      value = "Cadastra um planeta",
+      httpMethod = "POST",
+      response = Planeta.class)
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Planeta> criaPlaneta(@RequestBody Planeta planeta) {
@@ -46,6 +56,11 @@ public class PlanetaResource {
     return ResponseEntity.created(location).build();
   }
 
+  @ApiOperation(
+      value = "Lista todos os planetas",
+      httpMethod = "GET",
+      response = Planeta.class,
+      responseContainer = "List")
   @GetMapping(
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Planeta>> listaPlanetas() {

@@ -17,7 +17,7 @@ public class SwaggerConfig {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
         .apis(RequestHandlerSelectors.basePackage("com.andersonbco.api.resource"))
-        .paths(PathSelectors.ant("/planetas/*"))
+        .paths(PathSelectors.regex("/planetas.*"))
         .build();
   }
 }
