@@ -33,7 +33,7 @@ public class PlanetaResource {
   @ApiOperation(
       value = "Busca um planeta através do ID",
       httpMethod = "GET",
-      response = Planeta.class)
+      response = PlanetaDTO.class)
   @GetMapping("/{id}")
   public ResponseEntity<PlanetaDTO> buscaPlanetaPorId(@PathVariable String id) {
     PlanetaDTO planetaDTO = planetaService.buscaPlaneta(id);
@@ -43,7 +43,7 @@ public class PlanetaResource {
   @ApiOperation(
       value = "Cadastra um planeta",
       httpMethod = "POST",
-      response = Planeta.class)
+      response = PlanetaDTO.class)
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PlanetaDTO> criaPlaneta(@RequestBody Planeta planeta) {
@@ -58,7 +58,7 @@ public class PlanetaResource {
   @ApiOperation(
       value = "Lista todos os planetas",
       httpMethod = "GET",
-      response = Planeta.class,
+      response = PlanetaDTO.class,
       responseContainer = "List")
   @GetMapping(
       produces = MediaType.APPLICATION_JSON_VALUE)
