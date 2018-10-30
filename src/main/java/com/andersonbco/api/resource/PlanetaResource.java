@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,16 @@ public class PlanetaResource {
   }
 
   @ApiOperation(
+      value = "Busca um planeta através do Nome",
+      httpMethod = "GET",
+      response = PlanetaDTO.class)
+  @GetMapping("/nome/{nomePlaneta}")
+  public ResponseEntity<PlanetaDTO> buscaPlanetaPorNome(@PathVariable String nomePlaneta) {
+    PlanetaDTO planetaDTO = planetaService.buscaPlanetaPorNome(nomePlaneta);
+    return ResponseEntity.ok(planetaDTO);
+  }
+
+  @ApiOperation(
       value = "Cadastra um planeta",
       httpMethod = "POST",
       response = PlanetaDTO.class)
@@ -64,5 +75,14 @@ public class PlanetaResource {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<PlanetaDTO>> listaPlanetas() {
     return ResponseEntity.ok(planetaService.listaPlanetas());
+  }
+
+  @ApiOperation(
+      value = "Remove um planeta",
+      httpMethod = "DELETE",
+      response = Void.class)
+  @DeleteMapping("/{id}")
+  public void excluiPlaneta(@PathVariable String id) {
+    planetaService.excluiPlaneta(id);
   }
 }

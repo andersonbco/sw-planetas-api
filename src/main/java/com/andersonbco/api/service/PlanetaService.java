@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.andersonbco.api.client.PlanetaClient;
 import com.andersonbco.api.dto.PlanetaDTO;
 import com.andersonbco.api.entity.Planeta;
+import com.andersonbco.api.exception.PlanetaNaoEncontradoException;
 import com.andersonbco.api.repository.PlanetaRepository;
 import com.jayway.jsonpath.JsonPath;
 
@@ -26,11 +27,24 @@ public class PlanetaService {
 
   public PlanetaDTO buscaPlaneta(String id) {
 
-    return this.convertToPlanetaDTO(planetaRepository.findById(id).get());
+    return planetaRepository.findById(id).map(this::convertToPlanetaDTO)
+        .orElseThrow(() -> new PlanetaNaoEncontradoException("Planeta não encontrado"));
+  }
+
+  public PlanetaDTO buscaPlanetaPorNome(String nomePlaneta) {
+    return planetaRepository.findByNomeContainingIgnoreCase(nomePlaneta)
+        .map(this::convertToPlanetaDTO)
+        .orElseThrow(() -> new PlanetaNaoEncontradoException("Planeta não encontrado"));
   }
 
   public PlanetaDTO criaPlaneta(Planeta planeta) {
     return this.convertToPlanetaDTO(planetaRepository.save(planeta));
+  }
+
+  public void excluiPlaneta(String id) {
+    Planeta planeta = planetaRepository.findById(id)
+        .orElseThrow(() -> new PlanetaNaoEncontradoException("Planeta não encontrado"));
+    planetaRepository.delete(planeta);
   }
 
   public List<PlanetaDTO> listaPlanetas() {
@@ -41,10 +55,10 @@ public class PlanetaService {
   private PlanetaDTO convertToPlanetaDTO(Planeta planeta) {
     return PlanetaDTO.builder().id(planeta.getId()).nome(planeta.getNome())
         .clima(planeta.getClima()).terreno(planeta.getTerreno())
-        .quantidadeFilmes(this.countAparicoesFilmes(planeta.getNome())).build();
+        .quantidadeFilmes(this.contaAparicoesFilmes(planeta.getNome())).build();
   }
 
-  private int countAparicoesFilmes(String nomePlaneta) {
+  private int contaAparicoesFilmes(String nomePlaneta) {
     String responseJson = planetasClient.buscaQuantidadeAparicoesEmFilmes(nomePlaneta).getBody();
     JSONArray jsonArray = JsonPath.read(responseJson, "$.results[*].films[*]");
 
