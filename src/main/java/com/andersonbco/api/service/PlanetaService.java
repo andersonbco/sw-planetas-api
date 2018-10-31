@@ -20,10 +20,10 @@ import net.minidev.json.JSONArray;
 public class PlanetaService {
 
   @Autowired
-  private PlanetaRepository planetaRepository;
+  PlanetaRepository planetaRepository;
 
   @Autowired
-  private PlanetaClient planetasClient;
+  PlanetaClient planetasClient;
 
   public PlanetaDTO buscaPlaneta(String id) {
 
