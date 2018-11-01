@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.andersonbco.api.util.MessagesEnum;
+
 @ControllerAdvice
 public class ExceptionHandlers {
 
@@ -15,7 +17,7 @@ public class ExceptionHandlers {
       PlanetaNaoEncontradoException e, HttpServletRequest request) {
 
     ErrorMessage msg = new ErrorMessage();
-    msg.setMessage("Planeta não encontrado");
+    msg.setMessage(MessagesEnum.PLANETA_NAO_ENCONTRADO.getDescription());
 
     return ResponseEntity.ok(msg);
   }
@@ -24,8 +26,8 @@ public class ExceptionHandlers {
   public ResponseEntity<ErrorMessage> handleQuantidadeFilmesInexistenteException(
       QuantidadeFilmesInexistenteException e, HttpServletRequest request) {
     ErrorMessage msg = new ErrorMessage();
-    msg.setMessage("Não foi encontrado nenhum filme com este nome na base do SWAPI");
-    
+    msg.setMessage(MessagesEnum.PLANETA_NAO_ENCONTRADO_BASE_SWAPI.getDescription());
+
     return ResponseEntity.badRequest().body(msg);
   }
 }

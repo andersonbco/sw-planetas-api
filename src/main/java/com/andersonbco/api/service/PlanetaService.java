@@ -12,6 +12,7 @@ import com.andersonbco.api.dto.PlanetaDTO;
 import com.andersonbco.api.entity.Planeta;
 import com.andersonbco.api.exception.PlanetaNaoEncontradoException;
 import com.andersonbco.api.repository.PlanetaRepository;
+import com.andersonbco.api.util.MessagesEnum;
 import com.jayway.jsonpath.JsonPath;
 
 import net.minidev.json.JSONArray;
@@ -28,13 +29,14 @@ public class PlanetaService {
   public PlanetaDTO buscaPlaneta(String id) {
 
     return planetaRepository.findById(id).map(this::convertToPlanetaDTO)
-        .orElseThrow(() -> new PlanetaNaoEncontradoException("Planeta não encontrado"));
+        .orElseThrow(() -> new PlanetaNaoEncontradoException(
+            MessagesEnum.PLANETA_NAO_ENCONTRADO.getDescription()));
   }
 
   public PlanetaDTO buscaPlanetaPorNome(String nomePlaneta) {
     return planetaRepository.findByNomeContainingIgnoreCase(nomePlaneta)
-        .map(this::convertToPlanetaDTO)
-        .orElseThrow(() -> new PlanetaNaoEncontradoException("Planeta não encontrado"));
+        .map(this::convertToPlanetaDTO).orElseThrow(() -> new PlanetaNaoEncontradoException(
+            MessagesEnum.PLANETA_NAO_ENCONTRADO.getDescription()));
   }
 
   public PlanetaDTO criaPlaneta(Planeta planeta) {
@@ -42,8 +44,9 @@ public class PlanetaService {
   }
 
   public void excluiPlaneta(String id) {
-    Planeta planeta = planetaRepository.findById(id)
-        .orElseThrow(() -> new PlanetaNaoEncontradoException("Planeta não encontrado"));
+    Planeta planeta =
+        planetaRepository.findById(id).orElseThrow(() -> new PlanetaNaoEncontradoException(
+            MessagesEnum.PLANETA_NAO_ENCONTRADO.getDescription()));
     planetaRepository.delete(planeta);
   }
 
